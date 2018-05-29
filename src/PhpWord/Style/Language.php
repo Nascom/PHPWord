@@ -120,6 +120,7 @@ final class Language extends AbstractStyle
      */
     public function setLatin($latin)
     {
+        $latin = $this->correctLocale($latin);
         $this->validateLocale($latin);
         $this->latin = $latin;
 
@@ -222,5 +223,19 @@ final class Language extends AbstractStyle
         if ($locale !== null && strstr($locale, '-') === false) {
             throw new \InvalidArgumentException($locale . ' is not a valid language code');
         }
+    }
+
+    /**
+     * @param string|null $locale
+     * @return string|null
+     */
+    private function correctLocale($locale)
+    {
+        // This is a workaround for the error "en is not a valid language code".
+        if ($locale === 'en') {
+            return self::EN_GB;
+        }
+
+        return $locale;
     }
 }
